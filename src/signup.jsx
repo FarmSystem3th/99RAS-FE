@@ -38,7 +38,7 @@ function Signup() {
       const { username, password } = response.data;
       setMessage("회원가입 성공");
       alert(`회원가입 성공!\n아이디: ${username}\n비밀번호: ${password}`);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       setMessage("회원가입 실패");
       alert("회원가입 실패");
