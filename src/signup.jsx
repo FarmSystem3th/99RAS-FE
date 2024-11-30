@@ -26,8 +26,8 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const apiUrl = isEncrypted
-      ? "http://localhost:8080/protected-join"
-      : "http://localhost:8080/join";
+      ? "https://www.dev-app-server.site/protected-join"
+      : "https://www.dev-app-server.site/join";
 
     try {
       const response = await axios.post(apiUrl, formData, {

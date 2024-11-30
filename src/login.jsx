@@ -35,7 +35,7 @@ function Login() {
     const body =
       apiChoice.includes("broken-access")
         ? { username: formData.username, password: formData.password, role: formData.role }
-        : { username: formData.username, password: formData.password }; 
+        : { username: formData.username, password: formData.password };
 
     try {
       const response = await axios.post(apiChoice, body, {
@@ -49,6 +49,23 @@ function Login() {
     }
   };
 
+  const handleResetAttempts = async () => {
+    try {
+      const body = {
+        username: formData.username,
+        password: formData.password,
+      };
+      await axios.post("https://www.dev-app-server.site/reset-login-attempt-count", body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      alert("시도 횟수가 초기화되었습니다.");
+    } catch (error) {
+      alert("시도 횟수 초기화에 실패했습니다.");
+    }
+  };
+
   const handleSignup = () => {
     navigate("/signup");
   };
@@ -59,16 +76,16 @@ function Login() {
       <form onSubmit={handleSubmit} style={styles.form}>
         <select value={apiChoice} onChange={handleApiChoiceChange} style={styles.select}>
           <option value="">공격 방법 선택</option>
-          <option value="http://localhost:8080/vulnerable-broken-access-login">
+          <option value="https://www.dev-app-server.site/vulnerable-broken-access-login">
             취약한 권한 조작 로그인
           </option>
-          <option value="http://localhost:8080/protected-broken-access-login">
+          <option value="https://www.dev-app-server.site/protected-broken-access-login">
             권한 조작 로그인 방어
           </option>
-          <option value="http://localhost:8080/vulnerable-brute-force-login">
+          <option value="https://www.dev-app-server.site/vulnerable-brute-force-login">
             취약한 무차별 공격 로그인
           </option>
-          <option value="http://localhost:8080/protected-brute-force-login">
+          <option value="https://www.dev-app-server.site/protected-brute-force-login">
             무차별 공격 로그인 방어
           </option>
         </select>
@@ -101,6 +118,15 @@ function Login() {
         <button type="submit" style={styles.button}>
           로그인
         </button>
+        {apiChoice.includes("protected-brute-force") && (
+          <button
+            type="button"
+            onClick={handleResetAttempts}
+            style={styles.resetButton}
+          >
+            시도 횟수 초기화
+          </button>
+        )}
       </form>
       {error && <p style={styles.error}>{error}</p>}
       <button onClick={handleSignup} style={styles.signupButton}>
@@ -137,6 +163,15 @@ const styles = {
     padding: "10px",
     fontSize: "16px",
     backgroundColor: "#4CAF50",
+    color: "white",
+    border: "none",
+    cursor: "pointer",
+  },
+  resetButton: {
+    marginTop: "10px",
+    padding: "10px",
+    fontSize: "16px",
+    backgroundColor: "#FF5733",
     color: "white",
     border: "none",
     cursor: "pointer",
